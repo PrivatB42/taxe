@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Modules",
+    "\\Modules\\User",
+    "\\Modules\\User\\database",
+    "\\Modules\\User\\database\\migrations",
+    "\\Modules\\User\\database\\seeders",
+    "\\Modules\\User\\resources",
+    "\\Modules\\User\\routes",
+    "\\public",
+    "\\public\\assets"
+  ],
+  "SelectedNode": "\\Modules\\User\\database\\migrations\\0001_01_01_000000_create_users_app_table.php",
+  "PreviewInSolutionExplorer": false
+}
