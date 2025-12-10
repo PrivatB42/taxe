@@ -33,9 +33,11 @@ class ContribuableController extends BaseController
        // $this->contribuableTaxeService = $contribuableTaxeService;
     }
 
-    public function show($matricule, $action, ?int $contribuable_activite_id = null)
+    public function show($matricule, $action = 'activites', ?int $contribuable_activite_id = null)
     {
-
+        // Valeur par défaut pour action si non fournie
+        $action = $action ?: 'activites';
+        
         $contribuable = $this->service->getWhere('matricule', $matricule, null, 'first');
 
         $contribuable->load('personne');

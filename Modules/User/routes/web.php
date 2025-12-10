@@ -28,8 +28,10 @@ Route::middleware(['auth.web'])->group(function () {
         );
 
         // Route show séparée avec ses propres paramètres
-        Route::get('contribuables/{matricule}/{action}/{contribuable_activite_id?}', [ContribuableController::class, 'show'])
-            ->name('contribuables.show');
+        // Le paramètre action a une valeur par défaut 'activites'
+        Route::get('contribuables/{matricule}/{action?}/{contribuable_activite_id?}', [ContribuableController::class, 'show'])
+            ->name('contribuables.show')
+            ->where('action', 'activites|taxes|constantes');
 
         $configContribuableActivite = [
             'except' => ['index'],

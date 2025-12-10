@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 // Redirection de la racine vers le dashboard ou login
 Route::get('/', function () {
     if (auth()->check()) {
-        return redirect()->route('dashboard');
+        return redirect('/dashboard');
     }
-    return redirect()->route('login');
+    return redirect('/login');
 });
