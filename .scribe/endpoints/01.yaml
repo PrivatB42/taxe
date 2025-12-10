@@ -1,0 +1,945 @@
+name: Articles
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/articles/categorie/{slug}'
+    metadata:
+      groupName: Articles
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Liste des articles par catégorie
+
+        Retourne une liste paginée des articles appartenant à une catégorie spécifique, identifiée par son **slug** ou son **ID**.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        name: slug
+        description: 'The slug of the categorie.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      param:
+        name: param
+        description: "Le slug ou l'ID de la catégorie. Exemple: vestes-et-manteaux"
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      slug: consequatur
+      param: consequatur
+    queryParameters:
+      perPage:
+        name: perPage
+        description: 'Nombre d’articles par page. Par défaut: 24. Exemple: 12'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      perPage: 17
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "nom": "Article 1 - Vestes et Manteaux - Sony",
+                "slug": "article-1-vestes-et-manteaux-sony1427482424",
+                "prix": "11600.00",
+                "is_populaire": false,
+                "is_nouveau": true,
+                "en_promotion": true,
+                "pourcentage": 10,
+                "prix_promotionnel": "10440.00",
+                "en_stock": true
+              },
+              {
+                "id": 2,
+                "nom": "Article 2 - Vestes et Manteaux - L'Oréal",
+                "slug": "article-2-vestes-et-manteaux-loreal175216447",
+                "prix": "13600.00",
+                "is_populaire": true,
+                "is_nouveau": false,
+                "en_promotion": false,
+                "en_stock": true
+              }
+            ],
+            "links": {
+              "first": "http://localhost:8600/api/articles/categorie/vestes-et-manteaux?page=1",
+              "last": "http://localhost:8600/api/articles/categorie/vestes-et-manteaux?page=3",
+              "prev": null,
+              "next": "http://localhost:8600/api/articles/categorie/vestes-et-manteaux?page=2"
+            },
+            "meta": {
+              "current_page": 1,
+              "from": 1,
+              "last_page": 3,
+              "path": "http://localhost:8600/api/articles/categorie/vestes-et-manteaux",
+              "per_page": 24,
+              "to": 24,
+              "total": 72
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Catégorie introuvable.",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/articles/article/{slug}'
+    metadata:
+      groupName: Articles
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Détails d’un article
+
+        Récupère un article en fonction de son **ID** ou de son **slug**.  
+        Retourne toutes les informations : prix, stock, description, caractéristiques techniques, images, couleurs, marque, catégorie, et avis.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      slug:
+        name: slug
+        description: 'The slug of the article.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      param:
+        name: param
+        description: 'L’ID ou le slug de l’article. Exemple: article-1-vestes-et-manteaux-sony1427482424'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      slug: consequatur
+      param: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "id": 1,
+            "nom": "Article 1 - Vestes et Manteaux - Sony",
+            "slug": "article-1-vestes-et-manteaux-sony1427482424",
+            "prix": "11600.00",
+            "en_promotion": true,
+            "pourcentage": 10,
+            "prix_promotionnel": "10440.00",
+            "en_stock": true,
+            "quantite": 66,
+            "is_populaire": false,
+            "is_nouveau": true,
+            "is_personnalisable": true,
+            "is_fragile": true,
+            "is_remboursable": false,
+            "is_retour": false,
+            "livraison_transport": "personnel",
+            "description": "Description détaillée de l'article 1. Ce produit est de haute qualité et répond à tous les standards du marché.",
+            "caracteristiques_techniques": {
+              "Matière": [
+                "Plastique",
+                "Métal"
+              ],
+              "Dimensions": "47x50x8 cm",
+              "Poids": "978 g",
+              "Garantie": "2 an(s)"
+            },
+            "images": [
+              {
+                "chemin": "https://cdn-icons-png.flaticon.com/512/5723/5723238.png",
+                "is_principale": 1
+              }
+            ],
+            "couleurs_disponibles": [
+              {
+                "nom": "Blanc",
+                "code_hexadecimal": ["#FFFFFF"]
+              },
+              {
+                "nom": "Vert",
+                "code_hexadecimal": ["#00FF00"]
+              },
+              {
+                "nom": "Gris",
+                "code_hexadecimal": ["#808080"]
+              },
+              {
+                "nom": "Rose",
+                "code_hexadecimal": ["#FFC0CB"]
+              }
+            ],
+            "marque": {
+              "id": 5,
+              "nom": "Sony",
+              "logo": null
+            },
+            "categorie": {
+              "id": 27,
+              "nom": "Vestes et Manteaux",
+              "slug": "vestes-et-manteaux646337966",
+              "description": "Vestes, manteaux, blousons et accessoires",
+              "image_banner": "https://img.freepik.com/photos-gratuite/concept-maquette-chemise-vetements-unis_23-2149448749.jpg",
+              "image_presentation": "https://img.freepik.com/photos-premium/rack-vetements-modernes-blanc_392895-2483.jpg",
+              "parent_id": 9
+            },
+            "avis": [
+              {
+                "note": 4,
+                "commentaire": "Livraison en matinée si possible",
+                "date_publication": "2025-07-08T02:56:24.000000Z",
+                "user": "rt ft",
+                "user_photo": "http://localhost:8600/assets/images/avatar/user2.png"
+              }
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Article introuvable.",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/articles/populaires
+    metadata:
+      groupName: Articles
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Lister les articles populaires
+
+        Retourne une liste paginée des articles marqués comme populaires.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      perPage:
+        name: perPage
+        description: 'Nombre d’articles par page. Par défaut: 24. Exemple: 12'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      perPage: 17
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 2,
+                "nom": "Article 2 - Systèmes Audio - L'Oréal",
+                "slug": "article-2-systemes-audio-loreal175216447",
+                "prix": "13600.00",
+                "is_populaire": true,
+                "is_nouveau": true,
+                "en_promotion": true,
+                "pourcentage": 15,
+                "prix_promotionnel": "11560.00",
+                "en_stock": true
+              },
+              // ...
+            ],
+            "links": {
+              "first": "http://localhost:8600/api/articles/populaires?page=1",
+              "last": "http://localhost:8600/api/articles/populaires?page=3",
+              "prev": null,
+              "next": "http://localhost:8600/api/articles/populaires?page=2"
+            },
+            "meta": {
+              "current_page": 1,
+              "from": 1,
+              "last_page": 3,
+              "path": "http://localhost:8600/api/articles/populaires",
+              "per_page": 24,
+              "to": 24,
+              "total": 60
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Catégorie introuvable.",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/articles/nouveaux
+    metadata:
+      groupName: Articles
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Lister les nouveaux articles
+
+        Retourne une liste paginée des articles marqués comme nouveaux.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      perPage:
+        name: perPage
+        description: 'Nombre d’articles par page. Par défaut: 24. Exemple: 12'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      perPage: 17
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "nom": "Article 1 - Nouveautés",
+                "slug": "article-1-nouveautes",
+                "prix": "1500.00",
+                "is_populaire": false,
+                "is_nouveau": true,
+                "en_promotion": false,
+                "en_stock": true
+              },
+              // ...
+            ],
+            "links": {
+              "first": "http://localhost:8600/api/articles/nouveaux?page=1",
+              "last": "http://localhost:8600/api/articles/nouveaux?page=3",
+              "prev": null,
+              "next": "http://localhost:8600/api/articles/nouveaux?page=2"
+            },
+            "meta": {
+              "current_page": 1,
+              "from": 1,
+              "last_page": 3,
+              "path": "http://localhost:8600/api/articles/nouveaux",
+              "per_page": 24,
+              "to": 24,
+              "total": 60
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Catégorie introuvable.",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/articles/all
+    metadata:
+      groupName: Articles
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Liste paginée des articles
+
+        Retourne une liste paginée des articles disponibles avec leurs détails (nom, prix, promotions, etc.).
+        Le nombre d’articles par page peut être défini via le paramètre `perPage`.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      perPage:
+        name: perPage
+        description: 'Nombre d’articles par page. Par défaut: 24. Exemple: 12'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      perPage: 17
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "nom": "Article 1 - Vestes et Manteaux - Sony",
+                "slug": "article-1-vestes-et-manteaux-sony1427482424",
+                "prix": "11600.00",
+                "is_populaire": false,
+                "is_nouveau": true,
+                "en_promotion": true,
+                "pourcentage": 10,
+                "prix_promotionnel": "10440.00",
+                "en_stock": true
+              },
+              {
+                "id": 2,
+                "nom": "Article 2 - Systèmes Audio - L'Oréal",
+                "slug": "article-2-systemes-audio-loreal175216447",
+                "prix": "13600.00",
+                "is_populaire": true,
+                "is_nouveau": true,
+                "en_promotion": true,
+                "pourcentage": 15,
+                "prix_promotionnel": "11560.00",
+                "en_stock": true
+              }
+              // ...
+            ],
+            "links": {
+              "first": "http://localhost:8600/api/articles/all?page=1",
+              "last": "http://localhost:8600/api/articles/all?page=5",
+              "prev": null,
+              "next": "http://localhost:8600/api/articles/all?page=2"
+            },
+            "meta": {
+              "current_page": 1,
+              "from": 1,
+              "last_page": 5,
+              "links": [
+                {
+                  "url": null,
+                  "label": "&laquo; Previous",
+                  "active": false
+                },
+                {
+                  "url": "http://localhost:8600/api/articles/all?page=1",
+                  "label": "1",
+                  "active": true
+                },
+                {
+                  "url": "http://localhost:8600/api/articles/all?page=2",
+                  "label": "2",
+                  "active": false
+                },
+                {
+                  "url": "http://localhost:8600/api/articles/all?page=5",
+                  "label": "5",
+                  "active": false
+                },
+                {
+                  "url": "http://localhost:8600/api/articles/all?page=2",
+                  "label": "Next &raquo;",
+                  "active": false
+                }
+              ],
+              "path": "http://localhost:8600/api/articles/all",
+              "per_page": 24,
+              "to": 24,
+              "total": 102
+            }
+          }
+
+          traiter la pagination
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/articles/recherche/{query}'
+    metadata:
+      groupName: Articles
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Recherche d’articles
+
+        Permet de rechercher des articles par **nom** ou **description**.  
+        La recherche est effectuée en texte libre sur le mot-clé fourni dans `query`.
+        Les résultats sont paginés.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      query:
+        name: query
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      query: consequatur
+    queryParameters:
+      query:
+        name: query
+        description: 'Le mot-clé de recherche (nom ou description). Exemple: veste'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      perPage:
+        name: perPage
+        description: 'Nombre d’articles par page. Par défaut: 24. Exemple: 12'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      query: consequatur
+      perPage: 17
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "nom": "Article 1 - Vestes et Manteaux - Sony",
+                "slug": "article-1-vestes-et-manteaux-sony1427482424",
+                "prix": "11600.00",
+                "en_promotion": true,
+                "pourcentage": 10,
+                "prix_promotionnel": "10440.00",
+                "en_stock": true,
+                "is_populaire": false,
+                "is_nouveau": true
+              },
+              {
+                "id": 2,
+                "nom": "Article 2 - Veste légère - Zara",
+                "slug": "article-2-veste-legere-zara",
+                "prix": "9800.00",
+                "en_promotion": false,
+                "en_stock": true,
+                "is_populaire": true,
+                "is_nouveau": false
+              }
+            ],
+            "links": {
+              "first": "http://localhost:8600/api/articles/search?query=veste&page=1",
+              "last": "http://localhost:8600/api/articles/search?query=veste&page=2",
+              "prev": null,
+              "next": "http://localhost:8600/api/articles/search?query=veste&page=2"
+            },
+            "meta": {
+              "current_page": 1,
+              "from": 1,
+              "last_page": 2,
+              "path": "http://localhost:8600/api/articles/search",
+              "per_page": 24,
+              "to": 24,
+              "total": 35
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "success": false,
+            "message": "Le paramètre 'query' est requis.",
+            "code": 400
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/articles/filter
+    metadata:
+      groupName: Articles
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Filtrer les articles
+
+        Permet de filtrer dynamiquement les articles disponibles en fonction de plusieurs critères :
+        catégorie, marque, plage de prix, disponibilité en stock, nouveauté, popularité, etc.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      categorie_id:
+        name: categorie_id
+        description: 'ID de la catégorie. Exemple: 3'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      marque_id:
+        name: marque_id
+        description: 'ID de la marque. Exemple: 5'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      prix_min:
+        name: prix_min
+        description: 'Prix minimum. Exemple: 1000'
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      prix_max:
+        name: prix_max
+        description: 'Prix maximum. Exemple: 5000'
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      is_fragile:
+        name: is_fragile
+        description: 'Indique si l’article est fragile. Exemple: true'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      en_stock:
+        name: en_stock
+        description: 'Filtrer les articles en stock. Exemple: true'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      type_article:
+        name: type_article
+        description: 'Type d’article (ex: "produit", "service"). Exemple: produit'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      is_active:
+        name: is_active
+        description: 'Filtrer les articles actifs. Exemple: true'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      is_nouveau:
+        name: is_nouveau
+        description: 'Filtrer les nouveaux articles. Exemple: false'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      is_populaire:
+        name: is_populaire
+        description: 'Filtrer les articles populaires. Exemple: true'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      livraison_transport:
+        name: livraison_transport
+        description: 'Mode de livraison (ex: "standard", "express"). Exemple: express'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      search:
+        name: search
+        description: 'Terme de recherche (nom, description, etc.). Exemple: ordinateur portable'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      sort_by:
+        name: sort_by
+        description: 'Champ de tri (ex: "prix", "nom", "created_at"). Exemple: prix'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      sort_direction:
+        name: sort_direction
+        description: 'Direction du tri ("asc" ou "desc"). Par défaut: asc. Exemple: desc'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Nombre d’articles par page. Par défaut: 24. Exemple: 12'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      categorie_id: 17
+      marque_id: 17
+      prix_min: 11613.31890586
+      prix_max: 11613.31890586
+      is_fragile: false
+      en_stock: false
+      type_article: consequatur
+      is_active: false
+      is_nouveau: false
+      is_populaire: false
+      livraison_transport: consequatur
+      search: consequatur
+      sort_by: consequatur
+      sort_direction: consequatur
+      per_page: 17
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "current_page": 1,
+            "data": [
+              {
+                "id": 1,
+                "nom": "Ordinateur portable",
+                "description": "Laptop 15 pouces avec SSD",
+                "prix": 350000,
+                "en_stock": true,
+                ...
+              },
+              ...
+            ],
+            "first_page_url": "http://localhost/api/articles/filter?page=1",
+            "from": 1,
+            "last_page": 2,
+            "last_page_url": "http://localhost/api/articles/filter?page=2",
+            "next_page_url": "http://localhost/api/articles/filter?page=2",
+            "path": "http://localhost/api/articles/filter",
+            "per_page": 24,
+            "prev_page_url": null,
+            "to": 24,
+            "total": 30
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

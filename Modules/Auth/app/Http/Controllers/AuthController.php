@@ -4,78 +4,61 @@ namespace Modules\Auth\Http\Controllers;
 
 use App\Helpers\Constantes;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Modules\Auth\Services\AuthService;
 
 class AuthController extends Controller
 {
     protected AuthService $authService;
+
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
 
-    // public function register(Request $request)
-    // {
-    //     $typeCompte = $request->type_compte;
-    //     $rules = [
-    //         'nom_complet' => 'required|string|max:255',
-    //         'telephone' => 'required|numeric|digits:10|unique:entite_users,telephone',
-    //         'email' => 'nullable|email|unique:entite_users,email',
-    //         'password' => 'required|string|min:8',
-    //         'type_compte' => 'required|in:' . Constantes::COMPTE_ETUDIANT . ',' . Constantes::COMPTE_GESTIONNAIRE 
-    //     ];
+    /**
+     * Afficher la page de connexion
+     */
+    public function showLoginForm()
+    {
+        // Si déjà connecté, rediriger vers le dashboard
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
 
+        return view('auth::login');
+    }
 
-    //     $validate = Validator::make($request->all(), $rules, Constantes::VALIDATION_MESSAGES);
-
-    //     if ($validate->fails()) {
-    //         return response([
-    //             'success' => false,
-    //             'message' => $validate->errors()->all(),
-    //         ], 422);
-    //     }
-
-    //     try {
-    //         DB::beginTransaction();
-    //         $this->authService->register($validate->validated(), $typeCompte);
-    //         DB::commit();
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         return errorExeption($e);
-    //     }
-
-
-    //     return response([
-    //         'success' => true,
-    //         'message' => 'Inscription réussie',
-    //     ], 200);
-    // }
-
-
-
+    /**
+     * Traiter la connexion
+     */
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'identifiant' => 'required|string',
-            'password' => 'required|string|min:8',
-        ],
-        Constantes::VALIDATION_MESSAGES
-    );
+            'password' => 'required|string|min:4',
+        ], Constantes::VALIDATION_MESSAGES);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()->all()], 422);
+            return back()
+                ->withErrors($validator)
+                ->withInput($request->only('identifiant'));
         }
 
-        $this->authService->loginByWeb($validator->validated());
+        return $this->authService->loginByWeb($validator->validated());
     }
 
-    public function logout()
+    /**
+     * Déconnexion
+     */
+    public function logout(Request $request)
     {
-        $this->authService->logoutWeb();
-    }
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
+        return redirect()->route('login')->with('success', 'Vous avez été déconnecté avec succès.');
+    }
 }

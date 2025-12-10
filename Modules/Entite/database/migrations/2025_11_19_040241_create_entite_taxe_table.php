@@ -18,6 +18,7 @@ return new class extends Migration
 
             // Exemple: "surface_longueur * surface_largeur * coefficient"
             $table->text('formule')->nullable();
+            $table->int('multiplicateur')->default(12);
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });

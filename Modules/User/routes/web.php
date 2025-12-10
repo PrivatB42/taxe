@@ -5,62 +5,85 @@ use Modules\User\Http\Controllers\ActiviteLogController;
 use Modules\User\Http\Controllers\ContribuableActiviteController;
 use Modules\User\Http\Controllers\ContribuableController;
 use Modules\User\Http\Controllers\ContribuableParametreController;
+use Modules\User\Http\Controllers\ContribuableTaxeController;
 use Modules\User\Http\Controllers\GestionnaireController;
 
-// Route::middleware(['auth', 'verified'])->group(function () {
-//     Route::resource('users', UserController::class)->names('user');
-// });
+/*
+|--------------------------------------------------------------------------
+| Routes protégées par authentification
+|--------------------------------------------------------------------------
+*/
 
-/**
- * Routes Contribuables - Accessibles aux Gestionnaires et Superviseurs
- */
-$configContribuable = [
-    'additional' => [
-        'show' => ['method' => 'GET', 'action' => 'show', 'path' => '/{matricule}'],
-    ]
-];
+Route::middleware(['auth.web'])->group(function () {
 
-makeRoutesfx(
-    'contribuables',
-    ContribuableController::class,
-    'contribuables',
-    $configContribuable
-);
+    // ====================================
+    // CONTRIBUABLES - Gestionnaire + Admin
+    // ====================================
+    Route::middleware(['role:gestionnaire,admin'])->group(function () {
+        $configContribuable = [
+            'additional' => [
+                'show' => ['method' => 'GET', 'action' => 'show', 'path' => '/{matricule}/{action}/{contribuable_activite_id?}'],
+            ]
+        ];
 
-$configContribuableActivite = [
-    'except' => ['index'],
-];
+        makeRoutesfx(
+            'contribuables',
+            ContribuableController::class,
+            'contribuables',
+            $configContribuable
+        );
 
-makeRoutesfx(
-    'contribuables-activites',
-ContribuableActiviteController::class,
-    'contribuables-activites',
-    $configContribuableActivite
-);
+        $configContribuableActivite = [
+            'except' => ['index'],
+        ];
 
-$configContribuableParametre = [
-    'except' => ['index'],
-];
+        makeRoutesfx(
+            'contribuables-activites',
+            ContribuableActiviteController::class,
+            'contribuables-activites',
+            $configContribuableActivite
+        );
 
-makeRoutesfx(
-    'contribuables-parametres',
-ContribuableParametreController::class,
-    'contribuables-parametres',
-    $configContribuableParametre
-);
+        $configContribuableParametre = [
+            'except' => ['index'],
+        ];
 
-/**
- * Routes Supervision - Accessibles uniquement aux Superviseurs
- */
-Route::prefix('utilisateurs')->group(function () {
-    // Gestion des gestionnaires
-    makeRoutesfx('gestionnaires', GestionnaireController::class);
-});
+        makeRoutesfx(
+            'contribuables-parametres',
+            ContribuableParametreController::class,
+            'contribuables-parametres',
+            $configContribuableParametre
+        );
 
-Route::prefix('supervision')->group(function () {
-    // Suivi des activités des gestionnaires
-    Route::get('/activites-log', [ActiviteLogController::class, 'index'])->name('activites-log.index');
-    Route::post('/activites-log/data', [ActiviteLogController::class, 'getData'])->name('activites-log.data');
-    Route::get('/activites-log/stats', [ActiviteLogController::class, 'stats'])->name('activites-log.stats');
-    Route::get('/activites-log/gestionnaire/{id}', [ActiviteLogController::class, 'byGestionnaire'])->name('activites-log.by-gestionnaire');
+        makeRoutesfx(
+            'contribuables-taxes',
+            ContribuableTaxeController::class
+        );
+    });
+
+    // ====================================
+    // SUPERVISION - Superviseur + Admin
+    // Gestion des gestionnaires et suivi des activités
+    // ====================================
+    Route::middleware(['role:superviseur,admin'])->prefix('supervision')->group(function () {
+        
+        // Gestionnaires
+        makeRoutesfx('gestionnaires', GestionnaireController::class);
+
+        // Journal des activités des gestionnaires
+        Route::prefix('activites-log')->name('activites-log.')->group(function () {
+            Route::get('/', [ActiviteLogController::class, 'index'])->name('index');
+            Route::get('/data', [ActiviteLogController::class, 'data'])->name('data');
+            Route::get('/stats', [ActiviteLogController::class, 'stats'])->name('stats');
+            Route::get('/{id}', [ActiviteLogController::class, 'show'])->name('show');
+        });
+    });
+
+    // ====================================
+    // UTILISATEURS - Admin uniquement (pour gestion directe)
+    // ====================================
+    Route::middleware(['role:admin'])->prefix('utilisateurs')->group(function () {
+        makeRoutesfx('gestionnaires', GestionnaireController::class, 'admin.gestionnaires');
+    });
+
 });

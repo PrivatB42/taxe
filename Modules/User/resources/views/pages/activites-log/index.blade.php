@@ -4,164 +4,206 @@
 
 @section('style')
 <style>
-    .activity-timeline {
-        position: relative;
-        padding-left: 30px;
-    }
-    .activity-timeline::before {
-        content: '';
-        position: absolute;
-        left: 10px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: linear-gradient(180deg, var(--primary-color), var(--info-color));
-    }
-    .activity-item {
-        position: relative;
-        padding: 15px 0;
-        border-bottom: 1px solid #f0f0f0;
-    }
-    .activity-item::before {
-        content: '';
-        position: absolute;
-        left: -24px;
-        top: 20px;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: var(--primary-color);
-        border: 2px solid white;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    .stats-card {
+    .page-header-modern {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 16px;
+        border-radius: var(--border-radius);
+        padding: 32px;
         color: white;
-        padding: 24px;
-        margin-bottom: 20px;
         position: relative;
         overflow: hidden;
+        margin-bottom: 24px;
     }
-    .stats-card::after {
+
+    .page-header-modern::before {
         content: '';
         position: absolute;
         top: -50%;
-        right: -50%;
-        width: 100%;
+        right: -10%;
+        width: 50%;
         height: 200%;
-        background: rgba(255,255,255,0.1);
-        transform: rotate(30deg);
+        background: rgba(255, 255, 255, 0.1);
+        transform: rotate(15deg);
     }
-    .stats-card.green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
-    .stats-card.orange { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-    .stats-card.blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-    .stats-number {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 5px;
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 24px;
     }
-    .stats-label {
-        font-size: 0.9rem;
-        opacity: 0.9;
-    }
-    .filter-section {
+
+    .stat-card-mini {
         background: white;
-        border-radius: 12px;
+        border-radius: var(--border-radius-sm);
         padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: var(--card-shadow);
+        transition: var(--transition);
     }
-    .badge-action {
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.75rem;
+
+    .stat-card-mini:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-icon-mini {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+    }
+
+    .stat-content h3 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin: 0;
+        line-height: 1;
+        color: #1e293b;
+    }
+
+    .stat-content span {
+        font-size: 0.9rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .filter-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: var(--card-shadow);
+    }
+
+    .filter-card .form-label {
         font-weight: 600;
+        color: #334155;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
+
+    .table-card {
+        background: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+    }
+
+    .table-card .card-header {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
     .gestionnaire-avatar {
         width: 40px;
         height: 40px;
-        border-radius: 50%;
+        border-radius: 10px;
         object-fit: cover;
-        margin-right: 10px;
     }
-    .table-modern thead th {
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-        border: none;
-        padding: 15px;
+
+    .badge-action {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 0.8rem;
         font-weight: 600;
-        color: #495057;
+    }
+
+    .table-modern thead th {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: none;
+        padding: 16px 20px;
+        font-weight: 600;
+        color: #475569;
         text-transform: uppercase;
         font-size: 0.75rem;
         letter-spacing: 0.5px;
     }
+
     .table-modern tbody td {
-        padding: 15px;
+        padding: 16px 20px;
         vertical-align: middle;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid #f1f5f9;
     }
+
     .table-modern tbody tr:hover {
-        background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
     }
 </style>
 @endsection
 
 @section('content')
 
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h4 class="mb-1 fw-bold">
-                    <i class="fas fa-history text-primary me-2"></i>
-                    Suivi des Activités
-                </h4>
-                <p class="text-muted mb-0">Suivez toutes les actions effectuées par les gestionnaires</p>
-            </div>
-            <button class="btn btn-primary" onclick="refreshStats()">
-                <i class="fas fa-sync-alt me-2"></i>Actualiser
-            </button>
+<!-- En-tête de page -->
+<div class="page-header-modern">
+    <div class="d-flex justify-content-between align-items-center position-relative" style="z-index: 1;">
+        <div>
+            <h4 class="mb-2 fw-bold">
+                <i class="fas fa-history me-2"></i>
+                Suivi des Activités
+            </h4>
+            <p class="mb-0 opacity-90">Suivez toutes les actions effectuées par les gestionnaires en temps réel</p>
         </div>
+        <button class="btn btn-light" onclick="refreshData()">
+            <i class="fas fa-sync-alt me-2"></i>Actualiser
+        </button>
     </div>
 </div>
 
 <!-- Statistiques -->
-<div class="row mb-4" id="stats-container">
-    <div class="col-md-3">
-        <div class="stats-card">
-            <div class="stats-number" id="stat-total">-</div>
-            <div class="stats-label">Total des actions</div>
-            <i class="fas fa-chart-line position-absolute" style="right: 20px; bottom: 20px; font-size: 2rem; opacity: 0.3;"></i>
+<div class="stats-row">
+    <div class="stat-card-mini">
+        <div class="stat-icon-mini bg-primary bg-opacity-10">
+            <i class="fas fa-chart-line text-primary"></i>
+        </div>
+        <div class="stat-content">
+            <h3 id="stat-total">-</h3>
+            <span>Total des actions</span>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stats-card green">
-            <div class="stats-number" id="stat-today">-</div>
-            <div class="stats-label">Actions aujourd'hui</div>
-            <i class="fas fa-calendar-day position-absolute" style="right: 20px; bottom: 20px; font-size: 2rem; opacity: 0.3;"></i>
+
+    <div class="stat-card-mini">
+        <div class="stat-icon-mini bg-success bg-opacity-10">
+            <i class="fas fa-plus-circle text-success"></i>
+        </div>
+        <div class="stat-content">
+            <h3 id="stat-creations">-</h3>
+            <span>Créations</span>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stats-card orange">
-            <div class="stats-number" id="stat-week">-</div>
-            <div class="stats-label">Cette semaine</div>
-            <i class="fas fa-calendar-week position-absolute" style="right: 20px; bottom: 20px; font-size: 2rem; opacity: 0.3;"></i>
+
+    <div class="stat-card-mini">
+        <div class="stat-icon-mini bg-info bg-opacity-10">
+            <i class="fas fa-edit text-info"></i>
+        </div>
+        <div class="stat-content">
+            <h3 id="stat-modifications">-</h3>
+            <span>Modifications</span>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stats-card blue">
-            <div class="stats-number" id="stat-gestionnaires">{{ $gestionnaires->count() }}</div>
-            <div class="stats-label">Gestionnaires actifs</div>
-            <i class="fas fa-users position-absolute" style="right: 20px; bottom: 20px; font-size: 2rem; opacity: 0.3;"></i>
+
+    <div class="stat-card-mini">
+        <div class="stat-icon-mini bg-danger bg-opacity-10">
+            <i class="fas fa-trash text-danger"></i>
+        </div>
+        <div class="stat-content">
+            <h3 id="stat-suppressions">-</h3>
+            <span>Suppressions</span>
         </div>
     </div>
 </div>
 
 <!-- Filtres -->
-<div class="filter-section">
+<div class="filter-card">
     <div class="row g-3 align-items-end">
         <div class="col-md-3">
-            <label class="form-label fw-semibold">Gestionnaire</label>
+            <label class="form-label">Gestionnaire</label>
             <select class="form-select" id="filter-gestionnaire">
                 <option value="">Tous les gestionnaires</option>
                 @foreach($gestionnaires as $gestionnaire)
@@ -170,7 +212,7 @@
             </select>
         </div>
         <div class="col-md-2">
-            <label class="form-label fw-semibold">Action</label>
+            <label class="form-label">Action</label>
             <select class="form-select" id="filter-action">
                 <option value="">Toutes</option>
                 <option value="create">Création</option>
@@ -180,24 +222,29 @@
             </select>
         </div>
         <div class="col-md-2">
-            <label class="form-label fw-semibold">Date début</label>
+            <label class="form-label">Date début</label>
             <input type="date" class="form-control" id="filter-date-debut">
         </div>
         <div class="col-md-2">
-            <label class="form-label fw-semibold">Date fin</label>
+            <label class="form-label">Date fin</label>
             <input type="date" class="form-control" id="filter-date-fin">
         </div>
         <div class="col-md-3">
-            <button class="btn btn-primary w-100" onclick="applyFilters()">
-                <i class="fas fa-filter me-2"></i>Filtrer
-            </button>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary flex-fill" onclick="applyFilters()">
+                    <i class="fas fa-filter me-2"></i>Filtrer
+                </button>
+                <button class="btn btn-outline-secondary" onclick="resetFilters()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Tableau des activités -->
-<div class="card border-0 shadow-sm">
-    <div class="card-header bg-white py-3">
+<div class="table-card">
+    <div class="card-header">
         <h5 class="mb-0 fw-bold">
             <i class="fas fa-list text-primary me-2"></i>
             Historique des activités
@@ -212,7 +259,6 @@
 
 @section('script')
 <script>
-    // Charger les statistiques au chargement de la page
     document.addEventListener('DOMContentLoaded', function() {
         refreshStats();
     });
@@ -221,13 +267,19 @@
         fetch("{{ route('activites-log.stats') }}")
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    document.getElementById('stat-total').textContent = data.data.total.toLocaleString();
-                    document.getElementById('stat-today').textContent = data.data.today.toLocaleString();
-                    document.getElementById('stat-week').textContent = data.data.this_week.toLocaleString();
+                if (data.success && data.stats) {
+                    document.getElementById('stat-total').textContent = (data.stats.total || 0).toLocaleString();
+                    document.getElementById('stat-creations').textContent = (data.stats.creations || 0).toLocaleString();
+                    document.getElementById('stat-modifications').textContent = (data.stats.modifications || 0).toLocaleString();
+                    document.getElementById('stat-suppressions').textContent = (data.stats.suppressions || 0).toLocaleString();
                 }
             })
             .catch(error => console.error('Erreur:', error));
+    }
+
+    function refreshData() {
+        refreshStats();
+        applyFilters();
     }
 
     function applyFilters() {
@@ -236,7 +288,13 @@
             table.refreshTable();
         }
     }
+
+    function resetFilters() {
+        document.getElementById('filter-gestionnaire').value = '';
+        document.getElementById('filter-action').value = '';
+        document.getElementById('filter-date-debut').value = '';
+        document.getElementById('filter-date-fin').value = '';
+        applyFilters();
+    }
 </script>
 @endsection
-
-

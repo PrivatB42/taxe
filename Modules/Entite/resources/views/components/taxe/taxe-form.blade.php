@@ -27,9 +27,17 @@ $form->action(route('taxes.store'))
 ->textarea('formule',
 'Formule',
 [
-'required' => true,
 'placeholder' => 'Entrez la formule', 
 ]
+)
+
+->select(
+'multiplicateur',
+'Multiplicateur',
+$form->mapOptions(_constantes()::MULTIPLICATEUR_TAXE, 'value', 'label', 'Selectionnez un multiplicateur'),
+['required' => true],
+'',
+12
 )
 
 ->button('Valider', ['id' => 'btn-form-id'])

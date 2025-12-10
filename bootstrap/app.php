@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Modules\Auth\Http\Middleware\AuthMiddleware;
+use Modules\Auth\Http\Middleware\AuthWebMiddleware;
 use Modules\Auth\Http\Middleware\RoleMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -16,7 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'auth.api' => AuthMiddleware::class,
+            'auth.web' => AuthWebMiddleware::class,
             'role' => RoleMiddleware::class,
+            'guest' => \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

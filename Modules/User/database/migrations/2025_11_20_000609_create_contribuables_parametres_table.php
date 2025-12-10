@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('user_contribuables_parametres', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('contribuable_id');
+            $table->foreignId('contribuable_activite_id');
 
             $table->string('nom'); // surface_longueur, surface_largeur, nb_employes...
             $table->string('valeur')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(false);
             $table->timestamps();
 
-            $table->unique(['contribuable_id', 'nom']);
+            $table->unique(['contribuable_activite_id', 'nom']);
         });
     }
 

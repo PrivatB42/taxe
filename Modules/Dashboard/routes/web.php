@@ -3,10 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Dashboard\Http\Controllers\DashboardController;
 
-// Route::middleware(['auth', 'verified'])->group(function () {
-//     Route::resource('dashboards', DashboardController::class)->names('dashboard');
-// });
+/*
+|--------------------------------------------------------------------------
+| Dashboard Routes
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/', function () {
-    return view('dashboard::pages.index');
+Route::middleware(['auth.web'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard/stats', [DashboardController::class, 'stats'])->name('dashboard.stats');
 });

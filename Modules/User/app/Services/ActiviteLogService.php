@@ -2,6 +2,7 @@
 
 namespace Modules\User\Services;
 
+use App\Helpers\Constantes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Modules\User\Models\ActiviteLog;
@@ -10,7 +11,7 @@ use Modules\User\Models\Gestionnaire;
 class ActiviteLogService
 {
     /**
-     * Enregistrer une activité
+     * Enregistrer une activité du gestionnaire
      */
     public static function log(
         string $action,
@@ -20,15 +21,23 @@ class ActiviteLogService
         ?array $oldValues = null,
         ?array $newValues = null
     ): ?ActiviteLog {
-        $user = Auth::guard('api')->user() ?? Auth::user();
-        
-        if (!$user) {
+        // Vérifier que l'utilisateur est un gestionnaire
+        if (!Auth::check()) {
             return null;
         }
 
-        // Trouver le gestionnaire associé au compte
-        $gestionnaire = Gestionnaire::where('personne_id', $user->personne_id)->first();
+        $user = Auth::user();
         
+        // Seuls les gestionnaires sont suivis
+        if ($user->type_compte !== Constantes::COMPTE_GESTIONNAIRE) {
+            return null;
+        }
+
+        // Récupérer le gestionnaire associé
+        $gestionnaire = Gestionnaire::whereHas('personne', function ($query) use ($user) {
+            $query->where('id', $user->personne_id);
+        })->first();
+
         if (!$gestionnaire) {
             return null;
         }
@@ -47,31 +56,31 @@ class ActiviteLogService
     }
 
     /**
-     * Log de création
+     * Logger une création
      */
-    public static function logCreate(string $modelType, int $modelId, string $description, ?array $newValues = null): ?ActiviteLog
+    public static function logCreate(string $modelType, int $modelId, string $description, array $values = []): ?ActiviteLog
     {
-        return self::log('create', $modelType, $modelId, $description, null, $newValues);
+        return self::log('create', $modelType, $modelId, $description, null, $values);
     }
 
     /**
-     * Log de modification
+     * Logger une modification
      */
-    public static function logUpdate(string $modelType, int $modelId, string $description, ?array $oldValues = null, ?array $newValues = null): ?ActiviteLog
+    public static function logUpdate(string $modelType, int $modelId, string $description, array $oldValues, array $newValues): ?ActiviteLog
     {
         return self::log('update', $modelType, $modelId, $description, $oldValues, $newValues);
     }
 
     /**
-     * Log de suppression
+     * Logger une suppression
      */
-    public static function logDelete(string $modelType, int $modelId, string $description, ?array $oldValues = null): ?ActiviteLog
+    public static function logDelete(string $modelType, int $modelId, string $description, array $oldValues = []): ?ActiviteLog
     {
         return self::log('delete', $modelType, $modelId, $description, $oldValues, null);
     }
 
     /**
-     * Log de changement de statut
+     * Logger un changement de statut
      */
     public static function logToggle(string $modelType, int $modelId, string $description, bool $oldStatus, bool $newStatus): ?ActiviteLog
     {
@@ -79,45 +88,52 @@ class ActiviteLogService
     }
 
     /**
-     * Obtenir les activités d'un gestionnaire
+     * Logger une consultation
      */
-    public static function getByGestionnaire(int $gestionnaireId, int $limit = 50)
+    public static function logView(string $modelType, int $modelId, string $description): ?ActiviteLog
     {
-        return ActiviteLog::where('gestionnaire_id', $gestionnaireId)
-            ->orderBy('created_at', 'desc')
-            ->limit($limit)
-            ->get();
+        return self::log('view', $modelType, $modelId, $description);
     }
 
     /**
-     * Obtenir toutes les activités récentes
+     * Obtenir les statistiques des activités
      */
-    public static function getRecent(int $limit = 100)
+    public static function getStats(?int $gestionnaireId = null, ?string $dateDebut = null, ?string $dateFin = null): array
     {
-        return ActiviteLog::with('gestionnaire.personne')
-            ->orderBy('created_at', 'desc')
-            ->limit($limit)
-            ->get();
-    }
+        $query = ActiviteLog::query();
 
-    /**
-     * Statistiques par gestionnaire
-     */
-    public static function getStatsByGestionnaire(int $gestionnaireId): array
-    {
-        $logs = ActiviteLog::where('gestionnaire_id', $gestionnaireId);
+        if ($gestionnaireId) {
+            $query->where('gestionnaire_id', $gestionnaireId);
+        }
+
+        if ($dateDebut) {
+            $query->whereDate('created_at', '>=', $dateDebut);
+        }
+
+        if ($dateFin) {
+            $query->whereDate('created_at', '<=', $dateFin);
+        }
+
+        $total = $query->count();
         
+        $parAction = (clone $query)->selectRaw('action, COUNT(*) as count')
+            ->groupBy('action')
+            ->pluck('count', 'action')
+            ->toArray();
+
+        $parModelType = (clone $query)->selectRaw('model_type, COUNT(*) as count')
+            ->groupBy('model_type')
+            ->pluck('count', 'model_type')
+            ->toArray();
+
         return [
-            'total' => $logs->count(),
-            'today' => (clone $logs)->whereDate('created_at', today())->count(),
-            'this_week' => (clone $logs)->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
-            'by_action' => ActiviteLog::where('gestionnaire_id', $gestionnaireId)
-                ->selectRaw('action, count(*) as count')
-                ->groupBy('action')
-                ->pluck('count', 'action')
-                ->toArray(),
+            'total' => $total,
+            'par_action' => $parAction,
+            'par_model' => $parModelType,
+            'creations' => $parAction['create'] ?? 0,
+            'modifications' => $parAction['update'] ?? 0,
+            'suppressions' => $parAction['delete'] ?? 0,
+            'changements_statut' => $parAction['toggle'] ?? 0,
         ];
     }
 }
-
-

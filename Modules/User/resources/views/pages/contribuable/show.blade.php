@@ -1,9 +1,9 @@
-@extends('templates.layout')
+@extends('user::templates.contribuable-template')
 
-@section('pageTitle', 'Contribuables')
+@section('pageTitle', 'Contribuable - '. $action.($contribuableActivite ? ' - '.$contribuableActivite->activite?->nom : ''))
 
-@section('content')
+@section('contribuable-content')
 
-        @include('user::components.contribuable.contribuable-detail')
+        @include('user::components.contribuable.'.$component)
 
 @endsection

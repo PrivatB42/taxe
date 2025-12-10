@@ -9,7 +9,6 @@ use Modules\Auth\Models\Compte;
 
 class Personne extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     protected $table = 'user_personnes';
@@ -26,9 +25,9 @@ class Personne extends Model
         ];
     }
 
-     public function compte()
+    public function compte()
     {
-        return $this->hasOne(Compte::class, 'user_id');
+        return $this->hasOne(Compte::class, 'personne_id');
     }
 
     public function contribuable()
@@ -36,4 +35,16 @@ class Personne extends Model
         return $this->hasOne(Contribuable::class, 'personne_id');
     }
 
+    public function gestionnaire()
+    {
+        return $this->hasOne(Gestionnaire::class, 'personne_id');
+    }
+
+    /**
+     * Obtenir le nom complet formaté
+     */
+    public function getNomCompletAttribute(): string
+    {
+        return $this->attributes['nom_complet'] ?? 'N/A';
+    }
 }

@@ -16,6 +16,9 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Modules\Entite\Models\Taxe;
+use Modules\User\Models\Contribuable;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * return une date dans un format souhaité
@@ -1152,6 +1155,35 @@ function _constantes()
 
 function default_photo()
 {
-    return asset('assets/images/avatar/user'.rand(1, 4).'.png');
+    return asset('assets/images/avatar/user' . rand(1, 4) . '.png');
 }
 
+function calculeTaxeVariable(Contribuable $contribuable, Taxe $taxe, int $contribuableActiviteId, array $vars = [])
+{
+    // paramètres du contribuable
+    $parametres = $contribuable->parametresByContribuableActivite($contribuableActiviteId)->get() ?? [];
+    foreach ($parametres as $parametre) {
+        $vars[$parametre->nom] = castValue($parametre->valeur, $parametre->type);
+    }
+
+    // constantes de la taxe
+    foreach ($taxe->constantes ?? [] as $constante) {
+        $vars[$constante->nom] = castValue($constante->valeur, $constante->type);
+    }
+
+
+    // 3. Évaluer la formule
+    $expr = new ExpressionLanguage();
+
+    return $expr->evaluate($taxe->formule, $vars);
+}
+
+function castValue($value, $type)
+{
+    return match ($type) {
+        'int' => (int) $value,
+        'decimal' => (float) $value,
+        'bool' => (bool) $value,
+        default => $value,
+    };
+}

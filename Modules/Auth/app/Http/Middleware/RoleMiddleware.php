@@ -11,92 +11,80 @@ class RoleMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  ...$roles  Les rôles autorisés
-     * @return mixed
+     * Vérifie que l'utilisateur a le rôle requis
+     * 
+     * Usage: middleware('role:admin') ou middleware('role:admin,superviseur')
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        $user = Auth::guard('api')->user();
-
-        if (!$user) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Non authentifié',
-                    'error_code' => 'UNAUTHENTICATED'
-                ], 401);
-            }
+        if (!Auth::check()) {
             return redirect()->route('login');
         }
 
+        $user = Auth::user();
         $userRole = $user->type_compte;
 
-        // Vérifier si l'utilisateur a l'un des rôles requis
-        if (!in_array($userRole, $roles)) {
-            if ($request->expectsJson()) {
+        // L'admin a tous les droits
+        if ($userRole === Constantes::COMPTE_ADMIN) {
+            return $next($request);
+        }
+
+        // Vérifier si le rôle de l'utilisateur est dans la liste des rôles autorisés
+        if (!empty($roles) && !in_array($userRole, $roles)) {
+            if ($request->ajax() || $request->wantsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Accès non autorisé. Vous n\'avez pas les permissions nécessaires.',
-                    'error_code' => 'FORBIDDEN'
+                    'message' => 'Vous n\'avez pas les droits nécessaires pour accéder à cette ressource.'
                 ], 403);
             }
-            abort(403, 'Accès non autorisé');
+
+            return redirect()->route('dashboard')->with('error', 'Vous n\'avez pas les droits nécessaires pour accéder à cette page.');
         }
 
         return $next($request);
     }
 
     /**
-     * Vérifie si l'utilisateur peut accéder à une route spécifique
+     * Vérifier si l'utilisateur actuel est admin
      */
-    public static function canAccess(string $routeName): bool
+    public static function isAdmin(): bool
     {
-        $user = Auth::guard('api')->user() ?? Auth::user();
-        
-        if (!$user) {
-            return false;
-        }
-
-        $userRole = $user->type_compte;
-        $permissions = Constantes::PERMISSIONS[$userRole] ?? [];
-
-        foreach ($permissions as $permission) {
-            // Permission avec wildcard (ex: contribuables.*)
-            if (str_ends_with($permission, '.*')) {
-                $prefix = str_replace('.*', '', $permission);
-                if (str_starts_with($routeName, $prefix)) {
-                    return true;
-                }
-            }
-            // Permission exacte
-            if ($permission === $routeName) {
-                return true;
-            }
-        }
-
-        return false;
+        return Auth::check() && Auth::user()->type_compte === Constantes::COMPTE_ADMIN;
     }
 
     /**
-     * Vérifie si l'utilisateur est un superviseur
+     * Vérifier si l'utilisateur actuel est superviseur
      */
     public static function isSuperviseur(): bool
     {
-        $user = Auth::guard('api')->user() ?? Auth::user();
-        return $user && $user->type_compte === Constantes::COMPTE_SUPERVISEUR;
+        return Auth::check() && Auth::user()->type_compte === Constantes::COMPTE_SUPERVISEUR;
     }
 
     /**
-     * Vérifie si l'utilisateur est un gestionnaire
+     * Vérifier si l'utilisateur actuel est gestionnaire
      */
     public static function isGestionnaire(): bool
     {
-        $user = Auth::guard('api')->user() ?? Auth::user();
-        return $user && $user->type_compte === Constantes::COMPTE_GESTIONNAIRE;
+        return Auth::check() && Auth::user()->type_compte === Constantes::COMPTE_GESTIONNAIRE;
+    }
+
+    /**
+     * Obtenir le type de compte de l'utilisateur actuel
+     */
+    public static function getUserRole(): ?string
+    {
+        return Auth::check() ? Auth::user()->type_compte : null;
+    }
+
+    /**
+     * Vérifier si l'utilisateur a une permission spécifique
+     */
+    public static function hasPermission(string $permission): bool
+    {
+        if (!Auth::check()) {
+            return false;
+        }
+
+        return Constantes::hasPermission(Auth::user()->type_compte, $permission);
     }
 }
-
-

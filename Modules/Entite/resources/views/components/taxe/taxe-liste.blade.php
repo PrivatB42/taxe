@@ -24,6 +24,11 @@ $columns = [
 ],
 
 [
+'title' => '(x)',
+'data' => 'multiplicateur',
+],
+
+[
 'data' => 'id',
 'title' => 'Actions',
 'render' => 'function(data, type, row, meta) {
@@ -56,7 +61,7 @@ $config['rowCallback'] = 'if (!data.is_active) {
     var routeToggle = "{{ route('taxes.toggle-active', ':id') }}";
     var titleForm = 'Ajouter';
     var titleUpdate = 'Modifier';
-    var inputsId = ['nom', 'code'];
+    var inputsId = ['nom', 'code', 'formule', 'multiplicateur'];
 
     function arrayButtons(data, type, row, meta) {
         return `

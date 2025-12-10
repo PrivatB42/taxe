@@ -1,7 +1,7 @@
 @php
 $config = [
-'tableId' => 'table-id-1',
-'ajaxUrl' => route('contribuables-parametres.data').'?contribuable_id='.$contribuable->id,
+'tableId' => 'table-id',
+'ajaxUrl' => route('contribuables-parametres.data').'?contribuable_activite_id='.$contribuableActivite->id,
 'lengthChange' => false,
 'buttons' => [],
 ];
@@ -25,7 +25,7 @@ return `${data} : ${row.type}`
 'data' => 'id',
 'title' => 'Actions',
 'render' => 'function(data, type, row, meta) {
-return arrayButtons_(data, type, row, meta)
+return arrayButtons(data, type, row, meta)
 }',
 'searchable' => false,
 'orderable' => false,
@@ -46,24 +46,24 @@ $config['rowCallback'] = 'if (!data.is_active) {
 
 
  <script>
-    var tableName_ = 'table-id-1';
-    var form_ = 'form-id-1';
-    var btnForm_ = 'btn-form-id-1';
-    var routeStore_ = "{{ route('contribuables-parametres.store') }}";
-    var routeUpdate_ = "{{ route('contribuables-parametres.update', ':id') }}";
-    var routeToggle_ = "{{ route('contribuables-parametres.toggle-active', ':id') }}";
-    var titleForm_ = 'Ajouter';
-    var titleUpdate_ = 'Modifier';
-    var inputsId_ = ['nom', 'type', 'valeur'];
+    var tableName = 'table-id';
+    var form = 'form-id';
+    var btnForm = 'btn-form-id';
+    var routeStore = "{{ route('contribuables-parametres.store') }}";
+    var routeUpdate = "{{ route('contribuables-parametres.update', ':id') }}";
+    var routeToggle = "{{ route('contribuables-parametres.toggle-active', ':id') }}";
+    var titleForm = 'Ajouter';
+    var titleUpdate = 'Modifier';
+    var inputsId = ['nom', 'type', 'valeur'];
 
-    function arrayButtons_(data, type, row, meta) {
+    function arrayButtons(data, type, row, meta) {
         return `
-                <a href="#" onClick="editForm_(${meta.row})" 
+                <a href="#" onClick="editForm(${meta.row})" 
                    class="btn btn-sm btn-secondary btn-sm">
                    <i class="fas fa-edit"></i>
                 </a>
 
-                <button onClick="toggle_(${row.id}, ${row.is_active})" 
+                <button onClick="toggle(${row.id}, ${row.is_active})" 
                     class="btn btn-sm btn-${row.is_active ? 'danger' : 'success'}">
                     <i class="fas fa-toggle-${row.is_active ? 'off' : 'on'}"></i>
                 </button>
@@ -73,45 +73,45 @@ $config['rowCallback'] = 'if (!data.is_active) {
 
     document.addEventListener('DOMContentLoaded', function() {
 
-        x_form_fetch(form_, btnForm_, {
-            successCallback: 'refreshTable_',
-            formResetCallback: 'resetForm_'
+        x_form_fetch(form, btnForm, {
+            successCallback: 'refreshTable',
+            formResetCallback: 'resetForm'
         });
     });
 
-    function refreshTable_() {
-        x_datatable(tableName_).refreshTable()
+    function refreshTable() {
+        x_datatable(tableName).refreshTable()
         x_inner('x-alerts-container', '');
     }
 
-    function resetForm_() {
-        x_reset_form(form_, {
-            form_action: routeStore_,
+    function resetForm() {
+        x_reset_form(form, {
+            form_action: routeStore,
             form_method: 'POST'
         });
-        x_inner('card-title', titleForm_);
+        x_inner('card-title', titleForm);
     }
 
 
-    function editForm_($index) {
-        const table = x_datatable(tableName_);
+    function editForm($index) {
+        const table = x_datatable(tableName);
         const data = table.getRowData($index);
 
         x_form_edit(
-            form_,
-            inputsId_,
+            form,
+            inputsId,
             data, {
                 form_action: routeUpdate.replace(':id', data.id),
                 form_method: 'POST',
             },
         );
 
-        x_inner('card-title', titleUpdate_);
+        x_inner('card-title', titleUpdate);
     }
 
 
-    function toggle_(id, is_active) {
-        const table = x_datatable(tableName_);
+    function toggle(id, is_active) {
+        const table = x_datatable(tableName);
         const configModal = configModalChangeStatut(
             is_active ? 'Voulez-vous vraiment desactiver ?' : 'Voulez-vous vraiment activer ?',
             id,
@@ -122,7 +122,7 @@ $config['rowCallback'] = 'if (!data.is_active) {
         );
 
         const action = (id) => {
-            const url = routeToggle_.replace(':id', id);
+            const url = routeToggle.replace(':id', id);
             const callBacks = {
                 success: function(result, response) {
                     x_successNotification(result.message);

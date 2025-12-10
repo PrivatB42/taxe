@@ -13,10 +13,10 @@ class Taxe extends Model
     protected $guarded = ['id']; 
      public function activites()
     {
-        return $this->belongsToMany(Activite::class, 'activite_taxe')->withTimestamps();
+        return $this->belongsToMany(Activite::class, 'entite_activites_taxes')->withTimestamps();
     }
 
-    public function taxeConstante(){
+    public function constantes(){
         return $this->hasMany(TaxeConstante::class, 'taxe_id');
     }
 }

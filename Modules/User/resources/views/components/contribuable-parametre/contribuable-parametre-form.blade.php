@@ -4,11 +4,11 @@ $form = xFormBuilder();
 
 $form->action(route('contribuables-parametres.store'))
 ->method('POST')
-->form(['id' => 'form-id-1'])
+->form(['id' => 'form-id'])
 ->csrf(true)
 
 
-->hidden('contribuable_id', $contribuable->id)
+->hidden('contribuable_activite_id', $contribuableActivite->id)
 
 ->select(
 'type',
@@ -29,7 +29,7 @@ $form->mapOptions(_constantes()::TYPE_CONSTANTES_TAXE, 'type', 'libelle', 'Selec
 ['required' => true, 'placeholder' => 'Entrez la valeur']
 )
 
-->button('Valider', ['id' => 'btn-form-id-1'])
+->button('Valider', ['id' => 'btn-form-id'])
 ->render();
 @endphp
 

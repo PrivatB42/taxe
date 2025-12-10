@@ -1,0 +1,411 @@
+name: Authentification
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/auth/inscrire
+    metadata:
+      groupName: Authentification
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Enregistrement d’un nouvel utilisateur.
+
+        Ce endpoint permet de créer un nouvel utilisateur à partir des données fournies (nom, téléphone, email, mot de passe).
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nom_complet:
+        name: nom_complet
+        description: 'Le nom complet de l’utilisateur. Exemple: Jean Dupont'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      telephone:
+        name: telephone
+        description: 'Numéro de téléphone à 10 chiffres, unique. Exemple: 0701020304'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      email:
+        name: email
+        description: 'L’adresse email de l’utilisateur est optionelle (doit être valide et unique). Exemple: jean.dupont@example.com'
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Mot de passe (min. 8 caractères, incluant majuscules, minuscules, chiffres et caractères spéciaux). Exemple: Passw0rd!'
+        required: true
+        example: 'O[2UZ5ij-e/dl4m{o,'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'Confirmation du mot de passe. Doit être identique à `password`. Exemple: Passw0rd!'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nom_complet: consequatur
+      telephone: consequatur
+      email: qkunze@example.com
+      password: 'O[2UZ5ij-e/dl4m{o,'
+      password_confirmation: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "success": true,
+            "message": "Utilisateur enregistré avec succès.",
+            "code": 201
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": {
+              "email": ["L’adresse email est déjà utilisée."],
+              "password": ["Le mot de passe doit contenir au moins 8 caractères..."]
+            },
+            "data": null,
+            "code": 422
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur serveur. Veuillez réessayer plus tard.",
+            "data": null,
+            "code": 500
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/auth/connexion
+    metadata:
+      groupName: Authentification
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Connexion d'un utilisateur
+
+        Permet de connecter un utilisateur via son téléphone ou son adresse email, avec un mot de passe sécurisé.
+        Retourne un token JWT en cas de succès.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      identifiant:
+        name: identifiant
+        description: 'L’identifiant de connexion (téléphone ou email). Exemple: 0102030405'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'Mot de passe de l’utilisateur (min 8 caractères, avec majuscule, minuscule, chiffre et caractère spécial). Exemple: Password@123'
+        required: true
+        example: 'O[2UZ5ij-e/dl4m{o,'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      identifiant: consequatur
+      password: 'O[2UZ5ij-e/dl4m{o,'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Connexion réussie.",
+            "token_type": "bearer",
+            "expires_in": 3600,
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1...",
+            "code": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Identifiants incorrects.",
+            "code": 401
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur interne du serveur.",
+            "code": 500
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/auth/fresh
+    metadata:
+      groupName: Authentification
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Jetons mis à jour",
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur serveur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/auth/reset-password
+    metadata:
+      groupName: Authentification
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Réinitialisation du mot de passe (mot de passe temporaire)
+
+        Cette route permet d’envoyer un mot de passe temporaire à un utilisateur via son adresse email.  
+        Le mot de passe temporaire est généré et envoyé par mail si l'utilisateur est trouvé.  
+        Si l'email est invalide ou introuvable, une erreur est retournée.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: "L'adresse email de l'utilisateur. Exemple: user@example.com"
+        required: true
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: qkunze@example.com
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Mot de passe temporaire envoyé par email.",
+            "code": 200,
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": {
+              "email": [
+                "L'adresse email est invalide."
+              ]
+            },
+            "code": 422,
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur interne du serveur.",
+            "code": 500,
+            "user": null
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/user/logout
+    metadata:
+      groupName: Authentification
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Deconnexion reussie",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur serveur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

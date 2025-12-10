@@ -1,0 +1,105 @@
+name: Contacts
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/contact/create
+    metadata:
+      groupName: Contacts
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Envoi d'un nouveau message de contact
+
+        Cette endpoint permet aux utilisateurs d'envoyer un message de contact
+        avec leurs informations personnelles et le contenu de leur message.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nom_complet:
+        name: nom_complet
+        description: 'Le nom complet de la personne.'
+        required: true
+        example: 'Jean Dupont'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      telephone:
+        name: telephone
+        description: 'Le numéro de téléphone (10 chiffres).'
+        required: true
+        example: '0612345678'
+        type: numeric
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      objet:
+        name: objet
+        description: "L'objet du message (max 255 caractères)."
+        required: true
+        example: "Demande d'information"
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      message:
+        name: message
+        description: 'Le contenu du message.'
+        required: true
+        example: 'Bonjour, je souhaiterais obtenir des informations sur vos services.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nom_complet: 'Jean Dupont'
+      telephone: '0612345678'
+      objet: "Demande d'information"
+      message: 'Bonjour, je souhaiterais obtenir des informations sur vos services.'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "success": true,
+            "message": "Votre message a bien été envoyé"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "Les données fournies sont invalides.",
+            "errors": {
+              "nom_complet": ["Le champ nom complet est obligatoire."],
+              "telephone": ["Le champ telephone doit contenir 10 chiffres."]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

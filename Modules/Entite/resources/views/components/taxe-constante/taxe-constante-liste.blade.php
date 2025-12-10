@@ -59,7 +59,7 @@ $config['rowCallback'] = 'if (!data.is_active) {
     var routeToggle = "{{ route('taxes-constantes.toggle-active', ':id') }}";
     var titleForm = 'Ajouter';
     var titleUpdate = 'Modifier';
-    var inputsId = ['activite_id', 'taxe_id'];
+    var inputsId = ['activite_id', 'taxe_id', 'nom', 'valeur'];
 
     function arrayButtons(data, type, row, meta) {
         return `

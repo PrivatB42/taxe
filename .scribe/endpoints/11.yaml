@@ -1,0 +1,328 @@
+name: Notifications
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/notifications/user
+    metadata:
+      groupName: Notifications
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Récupère les 100 dernières notifications d’un utilisateur (lues et non lues)'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "nombre_non_lue": 2,
+            "notifications": [
+              {
+                "id": 1,
+                "titre": "Votre commande a été expédiée",
+                "notification": "La commande CMD-0001 a été remise au transporteur.",
+                "date_envoie": "2025-07-10T13:55:22.000000Z",
+                "is_read": false
+              }
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Non authentifié",
+            "code": 401
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/notifications/non-lue
+    metadata:
+      groupName: Notifications
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Récupère uniquement les notifications non lues de l’utilisateur'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+            {
+              "id": 2,
+              "titre": "Paiement validé",
+              "notification": "Votre paiement en ligne a été confirmé.",
+              "date_envoie": "2025-07-10T14:12:00.000000Z",
+              "is_read": false
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/notifications/marquer-lue/{notification_id}'
+    metadata:
+      groupName: Notifications
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Marque une notification comme lue'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      notification_id:
+        name: notification_id
+        description: 'The ID of the notification.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      id:
+        name: id
+        description: 'ID de la notification à marquer. Exemple: 2'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      notification_id: consequatur
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Notification marquée comme lu",
+            "code": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur lors de la marquage de la notification comme lu",
+            "code": 500
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/notifications/delete/{notification_id}'
+    metadata:
+      groupName: Notifications
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Supprime (logiquement) une notification utilisateur'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      notification_id:
+        name: notification_id
+        description: 'The ID of the notification.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      id:
+        name: id
+        description: 'ID de la notification à supprimer. Exemple: 3'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      notification_id: consequatur
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Notification supprimée",
+            "code": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Non authentifié",
+            "code": 401
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Notification introuvable",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/notifications/vider
+    metadata:
+      groupName: Notifications
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Vidé les notifications d'un utilisateur"
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Notifications vides",
+            "code": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Non authentifié",
+            "code": 401
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

@@ -27,7 +27,8 @@ class TaxeService extends BaseService
         return [
             'nom' => 'required|string',
             'code' => 'required|string',
-            'formule' => 'required|string'
+            'formule' => 'nullable|string',
+            'multiplicateur' => 'nullable|numeric|in:'.implode(',', [1, 2, 3, 4, 6, 12] ),
         ];
     }
 

@@ -1,0 +1,429 @@
+name: User
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - PUT
+    uri: api/user/change-password
+    metadata:
+      groupName: User
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Changer le mot de passe de l'utilisateur
+
+        Cette route permet à un utilisateur authentifié de modifier son mot de passe.  
+        Le mot de passe actuel doit être correct, et le nouveau mot de passe doit être confirmé et conforme aux règles de sécurité.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      current_password:
+        name: current_password
+        description: "Mot de passe actuel de l'utilisateur. Exemple: Ancien@123"
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      new_password:
+        name: new_password
+        description: 'Nouveau mot de passe (min 8 caractères, avec majuscule, minuscule, chiffre et caractère spécial). Exemple: Nouveau@456'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      new_password_confirmation:
+        name: new_password_confirmation
+        description: 'Confirmation du nouveau mot de passe. Doit être identique à new_password. Exemple: Nouveau@456'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      current_password: consequatur
+      new_password: consequatur
+      new_password_confirmation: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Mot de passe mis à jour avec succès.",
+            "code": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Mot de passe actuel incorrect.",
+            "code": 401
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": {
+              "new_password": [
+                "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial."
+              ]
+            },
+            "code": 422
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Une erreur interne est survenue.",
+            "code": 500
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/user
+    metadata:
+      groupName: User
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Récupérer l'utilisateur authentifié
+
+        Retourne les informations de l'utilisateur connecté, à partir du token JWT transmis dans l'en-tête `Authorization`.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Utilisateur récupéré avec succès.",
+            "data": {
+              "id": 1,
+              "nom_complet": "Jean Dupont",
+              "email": "user@example.com",
+              "telephone": "0102030405",
+              "photo": "https://example.com/photo.jpg",
+            },
+            "error": null,
+            "code": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Token d’authentification manquant ou invalide.",
+            "data": null,
+            "error": "Token absent.",
+            "code": 401
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur interne du serveur.",
+            "data": null,
+            "error": "Exception interne.",
+            "code": 500
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: api/user/update-user
+    metadata:
+      groupName: User
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Mise à jour du profil de l'utilisateur
+
+        Permet à l'utilisateur connecté de modifier son profil (nom complet, email ou téléphone).  
+        L'email et le téléphone doivent être uniques. Tous les champs sont optionnels mais au moins un doit être fourni.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nom_complet:
+        name: nom_complet
+        description: "Nom complet de l'utilisateur. Exemple: Jean Dupont"
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      email:
+        name: email
+        description: 'Adresse email valide et unique. Exemple: user@example.com'
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      telephone:
+        name: telephone
+        description: 'Numéro de téléphone à 10 chiffres, unique. Exemple: 0102030405'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nom_complet: consequatur
+      email: qkunze@example.com
+      telephone: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Profil mis à jour avec succès.",
+            "code": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Utilisateur introuvable.",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": {
+              "email": [
+                "L'adresse email est déjà utilisée."
+              ],
+              "telephone": [
+                "Le numéro de téléphone est invalide."
+              ]
+            },
+            "code": 422
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/user/change-photo
+    metadata:
+      groupName: User
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Mise à jour du profil de l'utilisateur
+
+        Permet à l'utilisateur connecté de modifier son profil (nom complet, email ou téléphone).  
+        L'email et le téléphone doivent être uniques. Tous les champs sont optionnels mais au moins un doit être fourni.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      photo:
+        name: photo
+        description: 'Must be an image. Must be a file. Must not be greater than 2048 kilobytes.'
+        required: true
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      nom_complet:
+        name: nom_complet
+        description: "Nom complet de l'utilisateur. Exemple: Jean Dupont"
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      email:
+        name: email
+        description: 'Adresse email valide et unique. Exemple: user@example.com'
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      telephone:
+        name: telephone
+        description: 'Numéro de téléphone à 10 chiffres, unique. Exemple: 0102030405'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nom_complet: consequatur
+      email: qkunze@example.com
+      telephone: consequatur
+    fileParameters:
+      photo: null
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Profil mis à jour avec succès.",
+            "code": 200
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Utilisateur introuvable.",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": {
+              "email": [
+                "L'adresse email est déjà utilisée."
+              ],
+              "telephone": [
+                "Le numéro de téléphone est invalide."
+              ]
+            },
+            "code": 422
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

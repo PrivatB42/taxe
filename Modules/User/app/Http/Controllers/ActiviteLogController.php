@@ -11,142 +11,139 @@ use Modules\User\Services\ActiviteLogService;
 class ActiviteLogController extends Controller
 {
     /**
-     * Afficher la page des activités
+     * Afficher la liste des activités
      */
     public function index()
     {
         $gestionnaires = Gestionnaire::with('personne')->get();
-        return view('user::pages.activites-log.index', compact('gestionnaires'));
+        
+        return view('user::pages.activites-log.index', [
+            'gestionnaires' => $gestionnaires,
+        ]);
     }
 
     /**
-     * Données pour le DataTable
+     * Obtenir les données pour DataTable
      */
-    public function getData(Request $request)
+    public function data(Request $request)
     {
-        $query = ActiviteLog::with(['gestionnaire.personne']);
+        $query = ActiviteLog::with(['gestionnaire.personne'])
+            ->orderBy('created_at', 'desc');
 
-        // Filtre par gestionnaire
+        // Filtres
         if ($request->filled('gestionnaire_id')) {
             $query->where('gestionnaire_id', $request->gestionnaire_id);
         }
 
-        // Filtre par action
         if ($request->filled('action')) {
             $query->where('action', $request->action);
         }
 
-        // Filtre par date
+        if ($request->filled('model_type')) {
+            $query->where('model_type', $request->model_type);
+        }
+
         if ($request->filled('date_debut')) {
             $query->whereDate('created_at', '>=', $request->date_debut);
         }
+
         if ($request->filled('date_fin')) {
             $query->whereDate('created_at', '<=', $request->date_fin);
         }
 
-        // Recherche globale
+        // Recherche
         if ($request->filled('search.value')) {
             $search = $request->input('search.value');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('description', 'like', "%{$search}%")
-                  ->orWhere('model_type', 'like', "%{$search}%")
-                  ->orWhereHas('gestionnaire.personne', function($q2) use ($search) {
-                      $q2->where('nom_complet', 'like', "%{$search}%");
-                  });
+                    ->orWhere('model_type', 'like', "%{$search}%")
+                    ->orWhereHas('gestionnaire.personne', function ($q2) use ($search) {
+                        $q2->where('nom_complet', 'like', "%{$search}%");
+                    });
             });
         }
 
-        $totalRecords = ActiviteLog::count();
-        $filteredRecords = $query->count();
+        $total = ActiviteLog::count();
+        $filtered = $query->count();
 
         // Pagination
         $start = $request->input('start', 0);
         $length = $request->input('length', 10);
-
-        // Tri
-        $orderColumn = $request->input('order.0.column', 0);
-        $orderDir = $request->input('order.0.dir', 'desc');
         
-        $columns = ['id', 'gestionnaire_id', 'action', 'description', 'created_at'];
-        $orderBy = $columns[$orderColumn] ?? 'created_at';
+        $activites = $query->skip($start)->take($length)->get();
 
-        $data = $query->orderBy($orderBy, $orderDir)
-            ->skip($start)
-            ->take($length)
-            ->get()
-            ->map(function ($log) {
-                return [
-                    'id' => $log->id,
-                    'gestionnaire' => $log->gestionnaire?->personne?->nom_complet ?? 'N/A',
-                    'gestionnaire_photo' => $log->gestionnaire?->photo ?? default_photo(),
-                    'action' => $log->action,
-                    'action_label' => $log->action_label,
-                    'action_color' => $log->action_color,
-                    'action_icon' => $log->action_icon,
-                    'model_type' => $log->model_type,
-                    'description' => $log->description,
-                    'ip_address' => $log->ip_address,
-                    'created_at' => $log->created_at->format('d/m/Y H:i'),
-                    'created_at_human' => $log->created_at->diffForHumans(),
-                ];
-            });
+        $data = $activites->map(function ($activite) {
+            return [
+                'id' => $activite->id,
+                'gestionnaire' => [
+                    'id' => $activite->gestionnaire->id ?? null,
+                    'nom' => $activite->gestionnaire->nom_complet ?? 'N/A',
+                    'photo' => $activite->gestionnaire->photo ?? default_photo(),
+                ],
+                'action' => $activite->action,
+                'action_label' => $activite->action_label,
+                'action_color' => $activite->action_color,
+                'action_icon' => $activite->action_icon,
+                'model_type' => $activite->model_type,
+                'model_id' => $activite->model_id,
+                'description' => $activite->description,
+                'ip_address' => $activite->ip_address,
+                'created_at' => $activite->created_at->format('d/m/Y H:i'),
+                'created_at_human' => $activite->created_at->diffForHumans(),
+            ];
+        });
 
         return response()->json([
             'draw' => $request->input('draw'),
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $filteredRecords,
+            'recordsTotal' => $total,
+            'recordsFiltered' => $filtered,
             'data' => $data,
         ]);
     }
 
     /**
-     * Statistiques des activités
+     * Obtenir les statistiques
      */
-    public function stats()
+    public function stats(Request $request)
     {
-        $stats = [
-            'total' => ActiviteLog::count(),
-            'today' => ActiviteLog::whereDate('created_at', today())->count(),
-            'this_week' => ActiviteLog::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
-            'by_action' => ActiviteLog::selectRaw('action, count(*) as count')
-                ->groupBy('action')
-                ->pluck('count', 'action')
-                ->toArray(),
-            'by_gestionnaire' => ActiviteLog::with('gestionnaire.personne')
-                ->selectRaw('gestionnaire_id, count(*) as count')
-                ->groupBy('gestionnaire_id')
-                ->orderByDesc('count')
-                ->limit(5)
-                ->get()
-                ->map(function ($item) {
-                    return [
-                        'gestionnaire' => $item->gestionnaire?->personne?->nom_complet ?? 'N/A',
-                        'count' => $item->count,
-                    ];
-                }),
-        ];
+        $stats = ActiviteLogService::getStats(
+            $request->gestionnaire_id,
+            $request->date_debut,
+            $request->date_fin
+        );
 
-        return response()->json(['success' => true, 'data' => $stats]);
+        return response()->json([
+            'success' => true,
+            'stats' => $stats,
+        ]);
     }
 
     /**
-     * Activités d'un gestionnaire spécifique
+     * Voir les détails d'une activité
      */
-    public function byGestionnaire(int $gestionnaireId)
+    public function show($id)
     {
-        $gestionnaire = Gestionnaire::with('personne')->findOrFail($gestionnaireId);
-        $stats = ActiviteLogService::getStatsByGestionnaire($gestionnaireId);
-        $recentActivities = ActiviteLogService::getByGestionnaire($gestionnaireId, 20);
+        $activite = ActiviteLog::with(['gestionnaire.personne'])->findOrFail($id);
 
         return response()->json([
             'success' => true,
             'data' => [
-                'gestionnaire' => $gestionnaire,
-                'stats' => $stats,
-                'recent_activities' => $recentActivities,
-            ]
+                'id' => $activite->id,
+                'gestionnaire' => [
+                    'nom' => $activite->gestionnaire->nom_complet ?? 'N/A',
+                    'photo' => $activite->gestionnaire->photo ?? default_photo(),
+                ],
+                'action' => $activite->action,
+                'action_label' => $activite->action_label,
+                'model_type' => $activite->model_type,
+                'model_id' => $activite->model_id,
+                'description' => $activite->description,
+                'old_values' => $activite->old_values,
+                'new_values' => $activite->new_values,
+                'ip_address' => $activite->ip_address,
+                'user_agent' => $activite->user_agent,
+                'created_at' => $activite->created_at->format('d/m/Y H:i:s'),
+            ],
         ]);
     }
 }
-
-

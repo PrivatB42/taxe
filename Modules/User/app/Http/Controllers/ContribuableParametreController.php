@@ -23,8 +23,12 @@ class ContribuableParametreController extends BaseController
     {
         return $this->service->getData($request, function ($query) use ($request) {
            
-            if ($request->get('contribuable_id')) {
-                $query->where('contribuable_id', $request->get('contribuable_id'));
+            // if ($request->get('contribuable_id')) {
+            //     $query->where('contribuable_id', $request->get('contribuable_id'));
+            // }
+
+            if ($request->get('contribuable_activite_id')) {
+                $query->where('contribuable_activite_id', $request->get('contribuable_activite_id'));
             }
         });
     }

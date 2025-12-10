@@ -148,11 +148,12 @@ trait ServiceTrait
     public function store(array $data)
     {
 
-        $data = $this->buildSlug($data);
 
         if (method_exists($this, 'beforeStore')) {
             $data = $this->beforeStore($data);
         }
+
+        $data = $this->buildSlug($data);
 
         $result = $this->model->create($data);
 

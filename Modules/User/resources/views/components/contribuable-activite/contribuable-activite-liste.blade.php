@@ -54,11 +54,22 @@ $config['rowCallback'] = 'if (!data.is_active) {
     var inputsId = ['activite_id', 'annee_debut'];
 
     function arrayButtons(data, type, row, meta) {
+        const route = "{{ route('contribuables.show', ['matricule' => $contribuable->matricule, 'action' => ':action', 'contribuable_activite_id' => ':id']) }}".replace(':id', row.id);
         return `
-                <a href="#" onClick="editForm(${meta.row})" 
+                <button onClick="goto('${route.replace(':action', 'constantes') }')" 
+                   class="btn btn-sm btn-primary btn-sm">
+                   <i class="fas fa-c"></i>
+                </button>
+
+                <button onClick="goto('${route.replace(':action', 'taxes') }')" 
+                   class="btn btn-sm btn-info btn-sm">
+                   <i class="fas fa-stamp"></i>
+                </button>
+
+                <button onClick="editForm(${meta.row})" 
                    class="btn btn-sm btn-secondary btn-sm">
                    <i class="fas fa-edit"></i>
-                </a>
+                </button>
 
                 <button onClick="toggle(${row.id}, ${row.is_active})" 
                     class="btn btn-sm btn-${row.is_active ? 'danger' : 'success'}">
@@ -66,6 +77,10 @@ $config['rowCallback'] = 'if (!data.is_active) {
                 </button>
 
             ` ;
+    }
+
+    function goto(ulr) {
+        window.location.href = ulr;
     }
 
     document.addEventListener('DOMContentLoaded', function() {

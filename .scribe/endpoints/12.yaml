@@ -1,0 +1,77 @@
+name: 'Offres Promotionnelles'
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/offres-promotionnelles
+    metadata:
+      groupName: 'Offres Promotionnelles'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Récupère les offres promotionnelles valides avec un nombre limité d'articles par offre.
+
+        Cette route retourne toutes les offres promotionnelles, accompagnées d'une liste limitée d'articles par offre (8 par défaut).
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      limit:
+        name: limit
+        description: "Nombre d'articles maximum à retourner par offre. Par défaut : 8. Exemple: 6"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      limit: 17
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+            {
+              "id": 1,
+              "titre": "Offre Spéciale Été",
+              "description": "Profitez de 20% de réduction sur une sélection d’articles",
+              "image_presentation": "https://example.com/image_presentation.jpg",
+              "image_banniere": "https://example.com/image_banniere.jpg",
+              "is_principale": true,
+              "is_limite": false,
+              "temps_limite": null,
+              "articles": [
+                {
+                  "id": 1,
+                  "nom": "Article promo 1",
+                  "slug": "article-promo-1",
+                  "prix": "10000.00",
+                  "prix_promotionnel": "8000.00",
+                  "image_principale": "https://cdn.example.com/image.png"
+                },
+                ...
+              ]
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

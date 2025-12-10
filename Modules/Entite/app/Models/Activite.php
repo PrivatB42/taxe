@@ -14,6 +14,6 @@ class Activite extends Model
 
     public function taxes()
     {
-        return $this->belongsToMany(Taxe::class, 'activite_taxe')->withTimestamps();
+        return $this->belongsToMany(Taxe::class, 'entite_activites_taxes')->withTimestamps();
     }
 }

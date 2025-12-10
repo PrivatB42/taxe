@@ -22,8 +22,8 @@ $columns = [
         'data' => 'gestionnaire',
         'render' => 'function(data, type, row) {
             return `<div class="d-flex align-items-center">
-                <img src="${row.gestionnaire_photo}" class="gestionnaire-avatar" alt="">
-                <span class="fw-semibold">${data}</span>
+                <img src="${row.gestionnaire.photo}" class="avatar me-3" alt="">
+                <span class="fw-semibold">${row.gestionnaire.nom}</span>
             </div>`;
         }'
     ],
@@ -31,7 +31,7 @@ $columns = [
         'title' => 'Action',
         'data' => 'action_label',
         'render' => 'function(data, type, row) {
-            return `<span class="badge badge-action bg-${row.action_color}">
+            return `<span class="badge bg-${row.action_color}">
                 <i class="fas ${row.action_icon} me-1"></i>${data}
             </span>`;
         }'
@@ -62,7 +62,7 @@ $columns = [
         'data' => 'created_at',
         'render' => 'function(data, type, row) {
             return `<div>
-                <span class="d-block">${data}</span>
+                <span class="d-block fw-semibold">${data}</span>
                 <small class="text-muted">${row.created_at_human}</small>
             </div>`;
         }'
@@ -72,5 +72,3 @@ $columns = [
 @endphp
 
 <x-generic.xtable :config="$config" :columns="$columns" />
-
-

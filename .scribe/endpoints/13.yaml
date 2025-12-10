@@ -1,0 +1,74 @@
+name: Bannières
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/banners
+    metadata:
+      groupName: Bannières
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Liste des bannières promotionnelles actives
+
+        Retourne toutes les bannières où :
+        - `is_active` est `true`
+        - La `date_debut` est antérieure ou égale à la date actuelle
+        - La `date_fin` est soit `null`, soit postérieure ou égale à la date actuelle
+
+        Les résultats sont triés par le champ `ordre` (ordre d’affichage croissant).
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          [
+            {
+              "id": 1,
+              "titre": "Promo Été 50% sur tout les produits informatique",
+              "image": "https://img.freepik.com/vecteurs-libre/modele-page-destination-du-vendredi-noir-degrade_23-2149723539.jpg",
+              "url": "https://example.com/ete1",
+              "is_active": true,
+              "ordre": 1,
+              "date_debut": "2025-07-03T00:00:00.000000Z",
+              "date_fin": "2025-08-02T00:00:00.000000Z",
+              "created_at": "2025-07-03T21:12:52.000000Z",
+              "updated_at": "2025-07-03T21:12:52.000000Z"
+            },
+            {
+              "id": 2,
+              "titre": "Nouvelle collection de pagnes africains",
+              "image": "https://img.freepik.com/vecteurs-libre/modele-publication-vente-medias-sociaux-degrade_23-2149040908.jpg",
+              "url": "https://example.com/ete2",
+              "is_active": true,
+              "ordre": 2,
+              "date_debut": "2025-07-03T00:00:00.000000Z",
+              "date_fin": "2025-07-23T00:00:00.000000Z",
+              "created_at": "2025-07-03T21:12:52.000000Z",
+              "updated_at": "2025-07-03T21:12:52.000000Z"
+            }
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

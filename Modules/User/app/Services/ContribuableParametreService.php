@@ -25,7 +25,7 @@ class ContribuableParametreService extends BaseService
     public function rules($id = null): array
     {
         return [
-            'contribuable_id' => 'required|numeric|exists:user_contribuables,id',
+            'contribuable_activite_id' => 'required|numeric|exists:user_contribuables_activites,id',
             'nom' => 'required|string',
             'valeur' => 'required|string',
             'type' => 'required|in:'.implode(',', [Constantes::TYPE_BOOL, Constantes::TYPE_DECIMAL, Constantes::TYPE_INT, Constantes::TYPE_STRING]),

@@ -1,0 +1,478 @@
+name: Commandes
+description: ''
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/commande/create
+    metadata:
+      groupName: Commandes
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Créer une commande
+
+        Cette route permet de créer une commande pour un utilisateur existant ou non.
+        Si l'utilisateur n'existe pas, un compte lui sera automatiquement créé avec un mot de passe aléatoire et envoyé par email (si l'email est fourni).
+
+        Le panier doit contenir des articles valides. La livraison, le mode de paiement, les réductions, les récompenses et les frais sont gérés automatiquement selon les données fournies.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nom_complet:
+        name: nom_complet
+        description: "Nom complet du client. Requis si l'utilisateur n'est pas connecté. Exemple: Jean Dupont"
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      email:
+        name: email
+        description: 'Email du client. Facultatif. Exemple: jean@example.com'
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      telephone:
+        name: telephone
+        description: "Numéro de téléphone du client (10 chiffres). Requis si l'utilisateur n'est pas connecté. Exemple: 0701020304"
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      adresse_livraison:
+        name: adresse_livraison
+        description: 'Adresse de livraison. Exemple: Cocody, Angré Terminus 81'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      commune_id:
+        name: commune_id
+        description: 'ID de la commune de livraison. Doit exister en base. Exemple: 1'
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      pays_id:
+        name: pays_id
+        description: 'ID du pays. Exemple: 1'
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      autres_plateformes:
+        name: autres_plateformes
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      mode_paiement:
+        name: mode_paiement
+        description: 'Mode de paiement : a_la_livraison ou en_ligne. Exemple: a_la_livraison'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      operateur:
+        name: operateur
+        description: 'Nom de l’opérateur de paiement. Requis uniquement si mode_paiement = en_ligne. Exemple: Orange Money'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      commentaire:
+        name: commentaire
+        description: 'Commentaire facultatif. Exemple: Merci de livrer avant 18h'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      panier:
+        name: panier
+        description: 'Liste des articles dans le panier'
+        required: true
+        example:
+          - consequatur
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      isUrgent:
+        name: isUrgent
+        description: 'true si livraison urgente. Exemple: true'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      codePromo:
+        name: codePromo
+        description: 'Code promotionnel facultatif. Exemple: PROMO10'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'panier[].id':
+        name: 'panier[].id'
+        description: 'ID de l’article. Exemple: 12'
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'panier[].quantite':
+        name: 'panier[].quantite'
+        description: 'Quantité souhaitée. Exemple: 3'
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      telephone_livraison:
+        name: telephone_livraison
+        description: 'Numéro de téléphone pour la livraison. Exemple: 0704050607'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      withCompte:
+        name: withCompte
+        description: 'true si le client veut que son compte soit créé. Exemple: true'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      nom_complet: consequatur
+      email: qkunze@example.com
+      telephone: consequatur
+      adresse_livraison: consequatur
+      commune_id: 17
+      pays_id: 17
+      autres_plateformes: mqeopfuudtdsufvyvddqa
+      mode_paiement: consequatur
+      operateur: consequatur
+      commentaire: consequatur
+      panier:
+        - consequatur
+      isUrgent: false
+      codePromo: consequatur
+      telephone_livraison: consequatur
+      withCompte: false
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "success": true,
+            "message": "Commande crée avec successe",
+            "code": 201
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "commune introuvable",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": {
+              "telephone_livraison": ["Le numéro de téléphone est obligatoire."],
+              "panier": ["Le panier est requis."]
+            },
+            "code": 422
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur lors de la création de la commande ...",
+            "code": 500
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/commande/suivre/{numero_commande}'
+    metadata:
+      groupName: Commandes
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Suivre le statut de livraison d'une commande
+
+        Cette route permet d’obtenir le **statut actuel de livraison** d’une commande à partir de son numéro.
+        Le statut peut indiquer des étapes telles que : "En préparation", "Expédiée", "Livrée", etc.
+      description: ''
+      authenticated: false
+      deprecated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      numero_commande:
+        name: numero_commande
+        description: 'Le numéro unique de la commande à suivre. Exemple: CMD20250710001'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      numero_commande: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            {
+                "id": 1,
+                "numero_commande": "CMD-0001",
+                "total_article": 20000,
+                "total_article_promotion": 18000,
+                "prix_livraison": 1500,
+                "total": 19500,
+                "commentaire": null,
+                "adresse_livraison": "Cocody, Angré Terminus 81",
+                "telephone_livraison": "0101010101",
+                "poids_total": 3.5,
+                "volume_total": 2.1,
+                "date_commande": "2025-07-10 14:00:00",
+                "statut_commande": "En cours de livraison",
+                "articles": [
+                  {
+                    "id": 10,
+                    "nom": "Casque Bluetooth",
+                    "slug": "casque-bluetooth-10215",
+                    "image_principale": "https://example.com/image.jpg",
+                    "pivot": {
+                      "quantite": 2,
+                      "prix_unitaire": 10000,
+                      "total": 20000
+                    }
+                  }
+                ]
+              }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Commande introuvable",
+            "code": 404
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/user/commandes
+    metadata:
+      groupName: Commandes
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: |-
+        Liste des commandes de l'utilisateur
+
+        Cette route renvoie la liste paginée des commandes effectuées par l'utilisateur connecté.
+        Elle inclut des informations sur les montants, le statut de livraison et les articles associés à chaque commande.
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: "string required Token d'accès. Exemple: Bearer {token}"
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: 'La page à afficher. Exemple: 1'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      page: 17
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "data": [
+              {
+                "id": 1,
+                "numero_commande": "CMD-0001",
+                "total_article": 20000,
+                "total_article_promotion": 18000,
+                "prix_livraison": 1500,
+                "total": 19500,
+                "commentaire": null,
+                "adresse_livraison": "Cocody, Angré Terminus 81",
+                "telephone_livraison": "0101010101",
+                "poids_total": 3.5,
+                "volume_total": 2.1,
+                "date_commande": "2025-07-10 14:00:00",
+                "statut_commande": "En cours de livraison",
+                "articles": [
+                  {
+                    "id": 10,
+                    "nom": "Casque Bluetooth",
+                    "slug": "casque-bluetooth-10215",
+                    "image_principale": "https://example.com/image.jpg",
+                    "pivot": {
+                      "quantite": 2,
+                      "prix_unitaire": 10000,
+                      "total": 20000
+                    }
+                  }
+                ]
+              }
+            ],
+            "links": {
+              "first": "http://localhost:8000/api/client/commandes?page=1",
+              "last": "http://localhost:8000/api/client/commandes?page=1",
+              "prev": null,
+              "next": null
+            },
+            "meta": {
+              "current_page": 1,
+              "from": 1,
+              "last_page": 1,
+              "path": "http://localhost:8000/api/client/commandes",
+              "per_page": 10,
+              "to": 1,
+              "total": 1
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Vous devez être authentifié pour accéder à cette ressource",
+            "code": 401
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

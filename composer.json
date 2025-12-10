@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.10.1",
         "nwidart/laravel-modules": "^12.0",
         "php-open-source-saver/jwt-auth": "^2.8",
+        "symfony/expression-language": "^7.4",
         "tightenco/parental": "^1.4"
     },
     "require-dev": {
