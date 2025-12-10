@@ -20,18 +20,16 @@ Route::middleware(['auth.web'])->group(function () {
     // CONTRIBUABLES - Gestionnaire + Admin
     // ====================================
     Route::middleware(['role:gestionnaire,admin'])->group(function () {
-        $configContribuable = [
-            'additional' => [
-                'show' => ['method' => 'GET', 'action' => 'show', 'path' => '/{matricule}/{action}/{contribuable_activite_id?}'],
-            ]
-        ];
-
+        // Routes de base pour les contribuables
         makeRoutesfx(
             'contribuables',
             ContribuableController::class,
-            'contribuables',
-            $configContribuable
+            'contribuables'
         );
+
+        // Route show séparée avec ses propres paramètres
+        Route::get('contribuables/{matricule}/{action}/{contribuable_activite_id?}', [ContribuableController::class, 'show'])
+            ->name('contribuables.show');
 
         $configContribuableActivite = [
             'except' => ['index'],
