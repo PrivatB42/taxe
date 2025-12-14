@@ -1,0 +1,7 @@
+{
+    "Dashboard": true,
+    "Auth": true,
+    "User": true,
+    "Entite": true,
+    "Paiement": true
+}
